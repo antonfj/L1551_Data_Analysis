@@ -103,13 +103,23 @@ print("K_2: ", K_2)
 #print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
 
-############## 3. Calculate electron density ###################
+############## 3. Calculate electron density and ionized gas mass ###################
 ################################################################################
 n_e = sqrt( 1710.0 * K_2 * D**(-1) * theta_min**(-1) )
 print("Electron density (cm^-3): ", n_e)
 
 freq_c = (K_2*T_e**-1.35)**(1/2.1)				# Turnover freq. in GHz
 print("Turnover frequency (GHz): ", freq_c)
+
+# Assume approximate spherical geometry for gas mass
+r = 1.496e16 * D * (theta_maj/2)       # Calculate radius of gas
+print("r (cm): ", r)
+
+m_H = 1.673e-24                         # Mass of hydrogen atom in g
+M_sun = 1.989e+33                       # Mass of sun in g
+M_ion = (4/3) * math.pi * r**3 * m_H * n_e
+print("M_ion (g): ", M_ion)
+print("M_ion (solar masses): ", M_ion/M_sun)
 
 ############## 4. Plot all the spectra in graphs ############################### 
 #############################################################################
@@ -149,7 +159,7 @@ fig = plt.figure(5, figsize=(15,9))
 ax = fig.add_subplot(111)
 plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020')
 # Plot 2003 data
-plt.errorbar(log_freq_2003, log_flux_2003, yerr=log_flux_err_2003, fmt='gs', label='2003')
+#plt.errorbar(log_freq_2003, log_flux_2003, yerr=log_flux_err_2003, fmt='gs', label='2003')
 # Plot 1998 data
 plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', label='1998')
 
@@ -166,7 +176,7 @@ plt.plot(np.log10(freq_samples), spectral_fit, 'k--', label='Combined')
 plt.plot(np.log10(freq_samples), np.log10((7.21e-4*T_e*Omega_s*freq_samples**2)*(1 - np.exp(-K_2*T_e**-1.35*freq_samples**-2.1))), color='green', label='Free-Free')
 
 # Plot high freq. spectral fit
-plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='brown', label='Dust')
+plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')
 
 # Set axes for the log-log graph by getting log of upper and lower limits for axes
 plt.axis(np.log10([1.0, 500.0, 1.0, 500.0]))

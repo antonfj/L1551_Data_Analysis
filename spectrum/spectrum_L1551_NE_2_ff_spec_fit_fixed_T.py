@@ -21,17 +21,13 @@ print("Omega_s: ", Omega_s)
 # Function for finding reduced chi-squared values
 def reduced_chisquared(observed, expected, errors, no_parameters):
 	dof = len(observed) - no_parameters
-#	print dof
 	sum_square_deviations = 0.0
 
 	for i in range(len(observed)):
 		square_deviation = (observed[i] - expected[i])**2 / errors[i]**2
 		sum_square_deviations += square_deviation
-#		print square_deviation
-#		print sum_square_deviations
 	
 	red_chi_squared = sum_square_deviations/dof
-#	print red_chi_squared
 	return red_chi_squared
 	
 # Combined power law spectrum
@@ -75,13 +71,23 @@ print("K_2: ", K_2)
 #print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
 
-############## 3. Calculate electron density ###################
+############## 3. Calculate electron density and ionized gas mass ###################
 ################################################################################
 n_e = sqrt( 1710.0 * K_2 * D**(-1) * theta_min**(-1) )
 print("Electron density (cm^-3): ", n_e)
 
 freq_c = (K_2*T_e**-1.35)**(1/2.1)				# Turnover freq. in GHz
 print("Turnover frequency (GHz): ", freq_c)
+
+# Assume approximate spherical geometry for gas mass
+r = 1.496e16 * D * (theta_maj/2)       # Calculate radius of gas
+print("r (cm): ", r)
+
+m_H = 1.673e-24                         # Mass of hydrogen atom in g
+M_sun = 1.989e+33                       # Mass of sun in g
+M_ion = (4/3) * math.pi * r**3 * m_H * n_e
+print("M_ion (g): ", M_ion)
+print("M_ion (solar masses): ", M_ion/M_sun)
 
 ############## 4. Plot all the spectra in graphs ############################### 
 #############################################################################

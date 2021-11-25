@@ -111,8 +111,9 @@ print("Electron density (cm^-3): ", n_e)
 freq_c = (K_2*T_e**-1.35)**(1/2.1)				# Turnover freq. in GHz
 print("Turnover frequency (GHz): ", freq_c)
 
+# Ionized Gas Mass
 # Assume approximate spherical geometry for gas mass
-r = 1.496e16 * D * (theta_maj/2)       # Calculate radius of gas
+r = 1.496e16 * D * (theta_min/2)       # Calculate radius of gas
 print("r (cm): ", r)
 
 m_H = 1.673e-24                         # Mass of hydrogen atom in g
@@ -120,6 +121,14 @@ M_sun = 1.989e+33                       # Mass of sun in g
 M_ion = (4/3) * math.pi * r**3 * m_H * n_e
 print("M_ion (g): ", M_ion)
 print("M_ion (solar masses): ", M_ion/M_sun)
+
+# Ionized Mass Loss Rate
+cross_section_area = math.pi * r**2 # Cross sectional area of jet in cm^2
+jet_vel = 200 * (1e5)                   # Jet velocity in cm/s
+
+ionized_Mdot = n_e * m_H * cross_section_area * jet_vel
+print("Ionized Mass Loss Rate (g/s): ", ionized_Mdot)
+print("Ionized Mass Loss Rate (Msun/yr): ", (ionized_Mdot/M_sun) * (365*24*60*60))
 
 ############## 4. Plot all the spectra in graphs ############################### 
 ################################################################################

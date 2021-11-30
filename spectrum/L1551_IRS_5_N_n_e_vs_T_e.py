@@ -137,7 +137,7 @@ plt.ylabel(r'$n_{e}\ (cm^{-3})$')
 plt.axis([0.0, 50000.0, 0.0, 150000.0])
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('L1551_IRS_5_N_ff_spec_fit_n_e vs_T_e.png')
+plt.savefig('L1551_IRS_5_N_ff_spec_fit_n_e_vs_T_e.png')
 
 ############## 4. Find electron density for each theta value #################
 ################################################################################
@@ -188,5 +188,5 @@ plt.ylabel(r'$n_{e}\ (cm^{-3})$')
 plt.axis([0.0, 0.5, 0.0, 200000.0])
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('L1551_IRS_5_N_ff_spec_fit_n_e vs_theta.png')
+plt.savefig('L1551_IRS_5_N_ff_spec_fit_n_e_vs_theta.png')
 plt.show()

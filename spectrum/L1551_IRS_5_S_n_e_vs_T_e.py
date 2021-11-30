@@ -41,20 +41,16 @@ def combined_power_law_fit(freq, alpha_high, K_2, K_3,):
         return log_flux
 
 # Flux values
-#flux = np.array([0.11, 0.51, 0.90, 1.19, 1.27, 1.63, 12.15, 34.07, 85.10, 271., 497.])
-#flux_err = np.array([0.00, 0.10, 0.03, 0.03, 0.05, 0.04, 0.10, 0.76, 1.70, 17., 35.])
-#flux = np.array([0.11, 0.51, 0.90, 1.19, 1.27, 1.63, 10.57, 13.63, 34.07, 85.10, 271., 497.])
-#flux_err = np.array([0.00, 0.10, 0.03, 0.03, 0.05, 0.04, 0.20, 0.45, 0.76, 1.70, 17., 35.])
-flux = np.array([0.11, 0.51, 0.90, 1.19, 1.27, 1.63, 34.07, 85.10, 271., 497.])
-flux_err = np.array([0.00, 0.10, 0.03, 0.03, 0.05, 0.04, 0.76, 1.70, 17., 35.])
+flux = np.array([1.13, 1.66, 1.89, 1.92, 2.11, 2.03, 20.02, 48.14, 154., 291.])
+flux_err = np.array([0.10, 0.07, 0.04, 0.03, 0.06, 0.05, 0.47, 0.82, 15., 27.])
 
 # Flux values from Rodriguez et al. (1998)
-flux_1998 = np.array([0.70, 0.78, 1.2, 2.0, 7.4, 45.0])
+flux_1998 = np.array([0.60, 0.70, 0.9, 1.5, 4.8, 23.0])
 flux_err_1998 = np.array([0.20, 0.02, 0.10, 0.2, 0.5, 6.0])
 
 # Flux values from Rodriguez et al. (2003)
-flux_2003 = np.array([0.51])
-flux_err_2003 = np.array([0.02])
+flux_2003 = np.array([1.14])
+flux_err_2003 = np.array([0.03])
 
 # Add in quadrature 10% absolute flux calibration error
 flux_err = np.sqrt(flux_err**2 + (0.1*flux)**2)
@@ -95,7 +91,6 @@ log_freq_2003 = np.log10(freq_2003)
 ############## 2. Find electron density for each T_e value #################
 ################################################################################
 n_e_values = np.zeros(len(T_e_values))
-print(n_e_values)
 for i in range(len(T_e_values)):
     T_e = T_e_values[i]
     init_guess = [2.0, 1e4, 0.01]
@@ -134,7 +129,7 @@ plt.xlabel('T_e (K)')
 plt.ylabel(r'$n_{e}\ (cm^{-3})$')
 
 # Set axes
-plt.axis([0.0, 50000.0, 0.0, 150000.0])
+plt.axis([0.0, 50000.0, 0.0, 1000000.0])
 
 plt.tight_layout()				# Make everything fit in window
 plt.savefig('L1551_IRS_5_S_ff_spec_fit_n_e_vs_T_e.png')
@@ -185,7 +180,7 @@ plt.xlabel(r'$\theta$ (arcsec)')
 plt.ylabel(r'$n_{e}\ (cm^{-3})$')
 
 # Set axes
-plt.axis([0.0, 0.5, 0.0, 200000.0])
+plt.axis([0.0, 0.5, 0.0, 1000000.0])
 
 plt.tight_layout()				# Make everything fit in window
 plt.savefig('L1551_IRS_5_S_ff_spec_fit_n_e_vs_theta.png')

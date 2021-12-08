@@ -7,7 +7,7 @@ import scipy.optimize
 from uncertainties import ufloat
 from uncertainties.umath import *  # Imports sin(), etc.
 
-T_e = 2e4                               # Fixed value of electron temperature
+T_e = 1e4                               # Fixed value of electron temperature
 #theta_maj = ufloat(0.396, 0.023)	# Major axis of source in arcsec
 #theta_min = ufloat(0.057, 0.022) 	# Minor axis of source in arcsec
 theta_maj = 0.454               	# Major axis of source in arcsec
@@ -57,7 +57,7 @@ print("Errors: ", flux_err)
 flux_err_1998 = np.sqrt(flux_err_1998**2 + (0.1*flux_1998)**2)
 print("Errors (1998): ", flux_err_1998)
 flux_err_2003 = np.sqrt(flux_err_2003**2 + (0.1*flux_2003)**2)
-print("Errors (1998): ", flux_err_2003)
+print("Errors (2003): ", flux_err_2003)
 
 # Logs of flux densities and errors for the log-log graph
 log_flux = np.log10(flux)
@@ -96,7 +96,18 @@ popt, pcov = scipy.optimize.curve_fit(combined_power_law_fit, freq, log_flux, in
 perr = np.sqrt(np.diag(pcov))
 perr = np.sqrt(np.diag(pcov))
 
+alpha_high = popt[0]
+K_2 = popt[1]
+K_3 = popt[2]
 
+# Give reduced chi-squared value (WARNING!!!: Reduced Chi-Square is not very accurate for non-linear fits)
+log_expected_flux = combined_power_law_fit(freq, alpha_high, K_2, K_3)
+print(log_expected_flux)
+red_chi_squared = reduced_chisquared(log_flux, log_expected_flux, log_flux_err, 3)
+
+print("Red. Chi-Squared: ", red_chi_squared)
+
+# Redefine fit parameters with errors
 alpha_high = ufloat(popt[0], perr[0])
 K_2 = ufloat(popt[1], perr[1])
 K_3 = ufloat(popt[2], perr[2])

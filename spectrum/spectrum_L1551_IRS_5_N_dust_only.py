@@ -36,7 +36,9 @@ print(flux_err)
 
 # Logs of flux densities for the log-log graph
 log_flux = np.log10(flux)
+print(log_flux)
 log_flux_err = (flux_err) / (flux * np.log(10))
+print(log_flux_err)
 
 # Frequencies that flux was measured at (X data)
 freq = np.array([5.0, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
@@ -47,12 +49,18 @@ log_freq = np.log10(freq)
 ############## 2. Find spectral index in each part of spectrum #################
 ################################################################################
 init_guess = [2.0, 0.01]
-popt, pcov = scipy.optimize.curve_fit(dust_power_law_fit, freq[6:], log_flux[6:], init_guess)
+popt, pcov = scipy.optimize.curve_fit(dust_power_law_fit, freq, log_flux, init_guess)
 print(popt)
 alpha_high, K_3 = popt
 #print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
 
+# Give reduced chi-squared value (WARNING!!!: Reduced Chi-Square is not very accurate for non-linear fits)
+log_expected_flux = dust_power_law_fit(freq, alpha_high, K_3)
+print(log_expected_flux)
+red_chi_squared = reduced_chisquared(log_flux, log_expected_flux, log_flux_err, 2)
+
+print("Red. Chi-Squared: ", red_chi_squared)
 
 ############## 6. Plot all the spectra in graphs ############################### 
 ################################################################################

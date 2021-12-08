@@ -94,7 +94,18 @@ popt, pcov = scipy.optimize.curve_fit(combined_power_law_fit, freq, log_flux, in
 perr = np.sqrt(np.diag(pcov))
 perr = np.sqrt(np.diag(pcov))
 
+alpha_high = popt[0]
+K_2 = popt[1]
+K_3 = popt[2]
 
+# Give reduced chi-squared value (WARNING!!!: Reduced Chi-Square is not very accurate for non-linear fits)
+log_expected_flux = combined_power_law_fit(freq, alpha_high, K_2, K_3)
+print(log_expected_flux)
+red_chi_squared = reduced_chisquared(log_flux, log_expected_flux, log_flux_err, 3)
+
+print("Red. Chi-Squared: ", red_chi_squared)
+
+# Redefine fit parameters with errors
 alpha_high = ufloat(popt[0], perr[0])
 K_2 = ufloat(popt[1], perr[1])
 K_3 = ufloat(popt[2], perr[2])

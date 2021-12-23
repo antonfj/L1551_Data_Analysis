@@ -7,7 +7,7 @@ import scipy.optimize
 from uncertainties import ufloat
 from uncertainties.umath import *  # Imports sin(), etc.
 
-T_e = 2e4                               # Fixed value of electron temperature
+T_e = 1e4                               # Fixed value of electron temperature
 #theta_maj = ufloat(0.396, 0.023)	# Major axis of source in arcsec
 #theta_min = ufloat(0.057, 0.022) 	# Minor axis of source in arcsec
 theta_maj = 0.202               	# Major axis of source in arcsec
@@ -36,19 +36,14 @@ def combined_power_law_fit(freq, alpha_high, K_2, K_3):
         return log_flux
 
 # Flux values
-flux = np.array([0.32, 0.30, 0.55, 0.79, 1.04, 1.31, 372.0])
-flux_err = np.array([0.06, 0.03, 0.02, 0.02, 0.04, 0.05, 15.0])
-
-# Flux values from Rodriguez et al. (1998)
-flux_1998 = np.array([0.60, 0.70, 0.9, 1.5, 4.8, 23.0])
-flux_err_1998 = np.array([0.20, 0.02, 0.10, 0.2, 0.5, 6.0])
-
+#flux = np.array([0.15, 0.17, 0.28, 0.34, 0.44, 0.49, 2.95, 3.69, 207.0])
+#flux_err = np.array([0.03, 0.05, 0.02, 0.02, 0.03, 0.03, 0.05, 0.07, 22.0])
+flux = np.array([0.15, 0.17, 0.28, 0.34, 0.44, 0.49, 207.0])
+flux_err = np.array([0.03, 0.05, 0.02, 0.02, 0.03, 0.03, 22.0])
 
 # Add in quadrature 10% absolute flux calibration error
 flux_err = np.sqrt(flux_err**2 + (0.1*flux)**2)
-print("Errors: ", flux_err)
-flux_err_1998 = np.sqrt(flux_err_1998**2 + (0.1*flux_1998)**2)
-print("Errors (1998): ", flux_err_1998)
+print(flux_err)
 
 # Logs of flux densities for the log-log graph
 log_flux = np.log10(flux)
@@ -123,11 +118,11 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Makes all text non-italic
 matplotlib.rcParams.update({'mathtext.default': 'regular'})
 # Sets font size of all text on graph
-matplotlib.rcParams.update({'font.size': 16})
-plt.rc('legend', fontsize=16)
+matplotlib.rcParams.update({'font.size': 12})
+plt.rc('legend', fontsize=12)
 
 # Plot data values
-fig = plt.figure(5, figsize=(10, 6))
+fig = plt.figure(5, figsize=(7, 4))
 ax = fig.add_subplot(111)
 plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo')
 
@@ -161,6 +156,6 @@ plt.xlabel(r'$\mathit{\nu}$ (GHz)')
 plt.ylabel(r'$\mathit{S_{\nu}}\ (mJy$)')
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('spectrum_L1551_NE_1_ff_spec_fit_fixed_T.png')
+plt.savefig('spectrum_L1551_NE_B_ff_spec_fit_fixed_T.png')
 
 plt.show()

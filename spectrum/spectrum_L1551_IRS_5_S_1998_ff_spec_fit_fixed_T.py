@@ -170,12 +170,11 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Makes all text non-italic
 matplotlib.rcParams.update({'mathtext.default': 'regular'})
 # Sets font size of all text on graph
-matplotlib.rcParams.update({'font.size': 16})
-plt.rc('legend', fontsize=16)
+matplotlib.rcParams.update({'font.size': 12})
+plt.rc('legend', fontsize=12)
 
 # Plot data values
-#fig = plt.figure(5, figsize=[9.6,6.3])
-fig = plt.figure(5, figsize=(15,9))
+fig = plt.figure(5, figsize=(7, 4))
 ax = fig.add_subplot(111)
 plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020')
 # Plot 2003 data

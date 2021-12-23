@@ -90,8 +90,6 @@ log_freq_2003 = np.log10(freq_2003)
 ############## 2. Find spectral index in each part of spectrum #################
 ################################################################################
 init_guess = [2.0, 1e4, 0.01]
-test_fit = combined_power_law_fit(freq, init_guess[0], init_guess[1], init_guess[2])
-print(test_fit)
 popt, pcov = scipy.optimize.curve_fit(combined_power_law_fit, freq, log_flux, init_guess)
 perr = np.sqrt(np.diag(pcov))
 perr = np.sqrt(np.diag(pcov))
@@ -172,12 +170,11 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Makes all text non-italic
 matplotlib.rcParams.update({'mathtext.default': 'regular'})
 # Sets font size of all text on graph
-matplotlib.rcParams.update({'font.size': 16})
-plt.rc('legend', fontsize=16)
+matplotlib.rcParams.update({'font.size': 12})
+plt.rc('legend', fontsize=12)
 
 # Plot data values
-#fig = plt.figure(5, figsize=[9.6,6.3])
-fig = plt.figure(5, figsize=(10, 6))
+fig = plt.figure(5, figsize=(7, 4))
 ax = fig.add_subplot(111)
 plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020')
 # Plot 2003 data

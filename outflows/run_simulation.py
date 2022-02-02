@@ -30,7 +30,7 @@ from matplotlib import cm
 t0 = time.time()
 #--------------------
 
-dx_grid = 0.5*u.au
+dx_grid = 1.0*u.au
 #*********************
 #OUTFLOW 1
 #*********************
@@ -42,7 +42,7 @@ tag = '_outflow1'
 pos_c = np.array([0*u.au, 0*u.au, 0])
 axis = np.array([-2,1,-1.154]) 
 z_min = 8*u.au
-z_max = 1000*u.au
+z_max = 100*u.au
 
 op_angle = 0.349        # Opening angle of jet in radians
 
@@ -64,12 +64,12 @@ ionfrac = [1.0,0.0]
 abund = [1e-4, 0]
 gtd = 100
 
-v0 = 100 * 1e3 #km/s
+v0 = 500 * 1e3 #km/s
 
-mass_loss_rate=1e-9     # Mass loss rate of star in M_sun yr^-1
+mass_loss_rate=1e-8     # Mass loss rate of star in M_sun yr^-1
 
-dens0 = 7.3e11
-#dens0 = (8.04e22/(w0**2 * 1.67e-27 * v0)) * mass_loss_rate # Calculate initial density from mass loss rate
+#dens0 = 2e12
+dens0 = (8.04e22/(w0**2 * 1.67e-27 * v0)) * mass_loss_rate # Calculate initial density from mass loss rate
 print("n_0: {:.2e}".format(dens0))
 qn = -2*eps
 dens = [dens0, qn]
@@ -107,8 +107,8 @@ t0 = time.time()
 #GRIDDING
 #********
 sizex = 200 * u.au
-sizey = sizez = 200 * u.au 
-Nx = Ny = Nz = 200
+sizey = sizez = 200 * u.au
+Nx = Ny = Nz = 500
 GRID = Model.grid([sizex, sizey, sizez], [Nx, Ny, Nz], rt_code='radmc3d')
 
 #********
@@ -138,30 +138,30 @@ density = finalprop['dens_e'] / 1e6 #dens. in cm^-3
 temperature = finalprop['temp_gas']
 
 weight = 100 * np.mean(density)
-
+"""
 #-----------------
 #Plot for DENSITY
 #-----------------
-#Pm.scatter3D(GRID, density, weight, NRand = 4000, axisunit = u.au, colorscale = 'log', cmap = 'cool',
-#             colorlabel = r'${\rm log}_{10}(n [cm^{-3}])$', output = 'global_grid_dens.png', vmin = 5, show=False)
+Pm.scatter3D(GRID, density, weight, NRand = 4000, axisunit = u.au, colorscale = 'log', cmap = 'cool',
+             colorlabel = r'${\rm log}_{10}(n [cm^{-3}])$', output = 'global_grid_dens.png', vmin = 5, show=False)
 
 #--------------------
 #Plot for TEMPERATURE
 #--------------------
-#Pm.scatter3D(GRID, density, weight, colordim = temperature, NRand = 4000, axisunit = u.au, colorscale = 'log',
-#             cmap = 'brg', colorlabel = r'${\rm log}_{10}(T$ $[K])$', output = 'global_grid_temp.png', vmin = 2, show=False)
-
+Pm.scatter3D(GRID, density, weight, colordim = temperature, NRand = 4000, axisunit = u.au, colorscale = 'log',
+             cmap = 'brg', colorlabel = r'${\rm log}_{10}(T$ $[K])$', output = 'global_grid_temp.png', vmin = 2, show=False)
+"""
 #####################################################################
 # Calculate radiative transfer and simulate image with RADMC-3D
 #####################################################################
-num_threads = "24"      # Set num. of threads for RADMC-3D to use
+num_threads = "8"      # Set num. of threads for RADMC-3D to use
 
-# Image at C Band (6 GHz)
+# Image at C Band (5 GHz)
 frequency = 5e9         # Frequency to simulate image
 sizeau = "200"          # Size in au of area to image
 npix = "200"             # Size of image in pixels
-#radmc3d_command = ["radmc3d", "image", "lambda", "136364", "setthreads", num_threads, "sizeau", sizeau, "npix", npix]
-#subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True)
+radmc3d_command = ["radmc3d", "image", "lambda", "136364", "setthreads", num_threads, "sizeau", sizeau, "npix", npix]
+subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True)
 #image.makeImage(wav=136364.,sizeau=sizeau,npix=npix)
 
 #K_Band_image = readImage("image.out")
@@ -174,5 +174,11 @@ subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True
 #makeImage(wav=60000.,sizeau=sizeau,npix=npix)
 
 C_Band_image = readImage("image.out")
-C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.081,0.034],pa=-28.29)
+C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.220,0.113],pa=43.831)
 plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
+"""
+# Same image convolved to X Band beam
+C_Band_image = readImage("image.out")
+C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.202,0.180],pa=-43.027)
+plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
+"""

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.cluster import KMeans
 
-# Manually set Spitzer values
+# Manually set Spitzer values obtained from Gutermuth et al. (2009)
 spitzer_data = pd.DataFrame([[7.12, 5.63, 53285.0]], columns=['w1mpro','w2mpro','mjd'])
 print(spitzer_data)
 

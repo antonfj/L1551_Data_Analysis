@@ -5,9 +5,9 @@ import aplpy
 
 # Images to use in the final image
 alma_image = 'L1551_IRS_5_ALMA_Band_4_shifted_to_VLA_epoch.fits'
-c_band_image = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.cropped.fits'
+c_band_image = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.fits'
 
-final_image = 'L1551_IRS_5_ALMA+C_Band_VLA+E-Merlin.png'
+final_image = 'L1551_IRS_5_ALMA+C_Band_VLA+E-Merlin.eps'
 
 fig = aplpy.FITSFigure(alma_image)
 fig.recenter(67.8923625, 18.1345753, width=0.7e-3, height=0.7e-3)
@@ -27,7 +27,7 @@ fig.add_label(0.58, 0.6, 'DG Tau A', relative=True, color='black')
 """
 
 # Overplot C Band contours
-sigma=12e-6
+sigma=11e-6
 fig.show_contour(c_band_image, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
 	6*sigma, 7*sigma, 8*sigma, 9*sigma, 10*sigma, 15*sigma, 20*sigma, 25*sigma],
 	colors='white', overlap=True)

@@ -11,12 +11,13 @@ import pandas as pd
 from sklearn.cluster import KMeans
 
 # Manually set Spitzer values obtained from Gutermuth et al. (2009)
-spitzer_data = pd.DataFrame([[7.12, 5.63, 53285.0]], columns=['w1mpro','w2mpro','mjd'])
+#spitzer_data = pd.DataFrame([[7.12, 5.63, 53285.0]], columns=['w1mpro','w2mpro','mjd']) # L1551 IRS 5
+spitzer_data = pd.DataFrame([[8.71, 7.13, 53285.0]], columns=['w1mpro','w2mpro','mjd']) # L1551 NE
 print(spitzer_data)
 
 # Import AllWise and NEOWise data
-allwise_data = pd.read_csv(r'/home/antonfj/L1551/L1551_Data_Analysis/NEOWise/AllWISE_results_L1551_IRS_5.csv', na_values=['null'])
-neowise_data = pd.read_csv(r'/home/antonfj/L1551/L1551_Data_Analysis/NEOWise/neowise_catalog_L1551_IRS_5.csv')
+allwise_data = pd.read_csv(r'./AllWISE_results_L1551_NE.csv', na_values=['null'])
+neowise_data = pd.read_csv(r'./neowise_catalog_L1551_NE.csv')
 
 # Get W1 and W2 fluxes
 allwise_fluxes = pd.DataFrame(allwise_data, columns=['ra', 'dec','w1mpro','w2mpro','mjd','dist'])
@@ -39,12 +40,12 @@ print(np.sqrt(ra_diff.std()**2 + dec_diff.std()**2))
 pos_err = pd.DataFrame(np.sqrt(ra_diff**2 + dec_diff**2), columns=['pos_err'])
 neowise_fluxes = pd.concat([neowise_fluxes, pos_err], axis=1)
 print(neowise_fluxes)
-neowise_fluxes = neowise_fluxes.loc[lambda neowise_fluxes: neowise_fluxes['pos_err'] < 0.7, :]
+neowise_fluxes = neowise_fluxes.loc[lambda neowise_fluxes: neowise_fluxes['pos_err'] < 0.3, :]
 print(neowise_fluxes)
 
-all_fluxes = pd.concat([spitzer_data, allwise_fluxes, neowise_fluxes], ignore_index=True)
+all_fluxes = pd.concat([spitzer_data,allwise_fluxes,neowise_fluxes], ignore_index=True)
 
-kmeans_m1 = KMeans(n_clusters=17).fit(all_fluxes[['w1mpro','mjd']])
+kmeans_m1 = KMeans(n_clusters=16).fit(all_fluxes[['w1mpro','mjd']])
 centroids_m1 = kmeans_m1.cluster_centers_
 epochs_m1 = pd.DataFrame(np.transpose(kmeans_m1.labels_), columns=['epoch'])
 all_fluxes = pd.concat([all_fluxes, epochs_m1], axis=1)
@@ -60,7 +61,7 @@ w2_means = np.array([])
 w2_stds = np.array([])
 mjd_w2_means = np.array([])
 
-for i in range(0,17):
+for i in range(0,16):
     epoch = all_fluxes.loc[all_fluxes['epoch'] == i]
     
     if len(epoch) == 1:
@@ -96,13 +97,13 @@ for i in range(0,17):
         w2_stds = np.append(w2_stds, w2_std)
         mjd_w2_means = np.append(mjd_w2_means, mjd_mean)
 
-#all_fluxes.plot.scatter(x='mjd', y='w1mpro', ylim=(8.0, 7.0))
+#all_fluxes.plot.scatter(x='mjd', y='w1mpro', ylim=(10.0, 9.0))
 plt.figure(0)
-plt.ylim(8.0, 7.0)
+plt.ylim(10.0, 8.5)
 #plt.scatter(centroids_m1[:, 1], centroids_m1[:, 0], c='red', s=50, ylim=(8.0, 7.0))
 plt.errorbar(mjd_w1_means, w1_means, yerr=w1_stds, color='blue', fmt='o')
 
-#all_fluxes.plot.scatter(x='mjd', y='w2mpro', ylim=(6.0, 4.4))
+#all_fluxes.plot.scatter(x='mjd', y='w2mpro', ylim=(7.5, 6.5))
 plt.figure(1)
-plt.ylim(6.0, 4.4)
+plt.ylim(7.5, 6.5)
 plt.errorbar(mjd_w2_means, w2_means, yerr=w2_stds, color='blue', fmt='o')

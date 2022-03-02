@@ -39,26 +39,34 @@ def combined_power_law_fit(freq, alpha_high, K_2, K_3):
 flux = np.array([0.32, 0.30, 0.55, 0.79, 1.04, 1.31, 372.0])
 flux_err = np.array([0.06, 0.03, 0.02, 0.02, 0.04, 0.05, 15.0])
 
-# Flux values from Rodriguez et al. (1998)
-flux_1998 = np.array([0.60, 0.70, 0.9, 1.5, 4.8, 23.0])
-flux_err_1998 = np.array([0.20, 0.02, 0.10, 0.2, 0.5, 6.0])
+# Flux values from Reipurth et al. (2002)
+flux_2000 = np.array([0.39])
+flux_err_2000 = np.array([0.01])
 
 
 # Add in quadrature 10% absolute flux calibration error
 flux_err = np.sqrt(flux_err**2 + (0.1*flux)**2)
 print("Errors: ", flux_err)
-flux_err_1998 = np.sqrt(flux_err_1998**2 + (0.1*flux_1998)**2)
-print("Errors (1998): ", flux_err_1998)
+flux_err_2000 = np.sqrt(flux_err_2000**2 + (0.1*flux_2000)**2)
+print("Errors (2000): ", flux_err_2000)
 
 # Logs of flux densities for the log-log graph
 log_flux = np.log10(flux)
 log_flux_err = (flux_err) / (flux * np.log(10))
+log_flux_2000 = np.log10(flux_2000)
+log_flux_err_2000 = (flux_err_2000) / (flux_2000 * np.log(10))
 
 # Frequencies that flux was measured at (X data)
 freq = np.array([6.0, 10.0, 13.5, 17.5, 20.0, 24.0, 336.0])
 
+# Frequencies of 2000 data
+wavelengths_2000 = np.array([36.0])
+freq_2000 = 3e8/(wavelengths_2000*1e6)
+print("Frequencies (2000): ", freq_2000)
+
 # Log of frequencies for the log-log graph
 log_freq = np.log10(freq)
+log_freq_2000 = np.log10(freq_2000)
 
 ############## 2. Find spectral index in each part of spectrum #################
 ################################################################################
@@ -129,7 +137,10 @@ plt.rc('legend', fontsize=12)
 # Plot data values
 fig = plt.figure(5, figsize=(7, 4))
 ax = fig.add_subplot(111)
-plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo')
+plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2021')
+
+# Plot 2000 data
+plt.errorbar(log_freq_2000, log_flux_2000, yerr=log_flux_err_2000, fmt='r^', label='2000')
 
 # Plot spectral fit
 alpha_high, K_2, K_3 = popt
@@ -159,6 +170,9 @@ ax.set_yticks(new_y_minor_tick_locations, minor=True)
 
 plt.xlabel(r'$\mathit{\nu}$ (GHz)')
 plt.ylabel(r'$\mathit{S_{\nu}}\ (mJy$)')
+
+# Add legend to plot
+plt.legend(loc='upper left')
 
 plt.tight_layout()				# Make everything fit in window
 plt.savefig('spectrum_L1551_NE_A_ff_spec_fit_fixed_T.png')

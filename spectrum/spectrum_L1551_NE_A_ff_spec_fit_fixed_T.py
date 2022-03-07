@@ -36,8 +36,8 @@ def combined_power_law_fit(freq, alpha_high, K_2, K_3):
         return log_flux
 
 # Flux values
-flux = np.array([0.32, 0.30, 0.55, 0.79, 1.04, 1.31, 372.0])
-flux_err = np.array([0.06, 0.03, 0.02, 0.02, 0.04, 0.05, 15.0])
+flux = np.array([0.32, 0.36, 0.60, 0.83, 1.16, 1.42, 372.0])
+flux_err = np.array([0.06, 0.06, 0.02, 0.02, 0.03, 0.04, 15.0])
 
 # Flux values from Reipurth et al. (2002)
 flux_2000 = np.array([0.39])

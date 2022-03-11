@@ -9,8 +9,13 @@ from uncertainties.umath import *  # Imports sin(), etc.
 
 # Parameters of jet
 T_e = 1e4                               # Fixed value of electron temperature
-r_0 = 8                            # Radius of base of jet in au
-w_0 = 1                             # Width at base of jet in au
+r_0 = 1                           # Radius of base of jet in au
+
+op_angle = 28 * (2*math.pi) / (360)        # Opening angle of jet in radians
+w_0 = r_0 * np.tan(op_angle/2)       # Width at base of jet in au
+print("w_0 (au): ", w_0)
+
+#w_0 = 1.4                           # Width at base of jet in au
 i = 45. * (2*math.pi) / (360)  # Inclination angle of jet in radians
 print("Inclination angle (radians): ", i)
 
@@ -42,10 +47,6 @@ def combined_power_law_fit(freq, alpha_high, K_1, K_3):
         return log_flux
 
 # Flux values
-#flux = np.array([0.73, 1.66, 1.89, 1.92, 2.11, 2.03, 8.22, 20.02, 48.14, 154., 291.])
-#flux_err = np.array([0.10, 0.07, 0.04, 0.03, 0.06, 0.05, 0.10, 0.47, 0.82, 15., 27.])
-#flux = np.array([0.73, 1.66, 1.89, 1.92, 2.11, 2.03, 7.04, 8.90, 20.02, 48.14, 154., 291.])
-#flux_err = np.array([0.10, 0.07, 0.04, 0.03, 0.06, 0.05, 0.26, 0.35, 0.47, 0.82, 15., 27.])
 flux = np.array([1.13, 1.66, 1.89, 1.92, 2.11, 2.03, 20.02, 48.14, 154., 291.])
 flux_err = np.array([0.10, 0.07, 0.04, 0.03, 0.06, 0.05, 0.47, 0.82, 15., 27.])
 
@@ -58,12 +59,8 @@ flux_2003 = np.array([1.14])
 flux_err_2003 = np.array([0.03])
 
 # Add in quadrature 10% absolute flux calibration error
-flux_err = np.sqrt(flux_err**2 + (0.1*flux)**2)
-print("Errors: ", flux_err)
-flux_err_1998 = np.sqrt(flux_err_1998**2 + (0.1*flux_1998)**2)
-print("Errors (1998): ", flux_err_1998)
-flux_err_2003 = np.sqrt(flux_err_2003**2 + (0.1*flux_2003)**2)
-print("Errors (2003): ", flux_err_2003)
+#flux_err = np.sqrt(flux_err**2 + (0.05*flux)**2)
+#print("Errors: ", flux_err)
 
 # Logs of flux densities and errors for the log-log graph
 log_flux = np.log10(flux)
@@ -74,8 +71,6 @@ log_flux_2003 = np.log10(flux_2003)
 log_flux_err_2003 = (flux_err_2003) / (flux_2003 * np.log(10))
 
 # Frequencies that flux was measured at (X data)
-#freq = np.array([5.1, 10.0, 13.5, 17.5, 20.0, 24.0, 43.0, 93.0, 153.0, 225.0, 336.0])
-#freq = np.array([5.1, 10.0, 13.5, 17.5, 20.0, 24.0, 41.0, 45.0, 93.0, 153.0, 225.0, 336.0])
 freq = np.array([5.1, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
 
 # Frequencies of 1998 data
@@ -140,15 +135,14 @@ M_sun = 1.989e+33                       # Mass of sun in g
 M_ion = (4/3) * math.pi * r**3 * m_H * n_e
 print("M_ion (g): ", M_ion)
 print("M_ion (solar masses): ", M_ion/M_sun)
-
+"""
 # Ionized Mass Loss Rate
-cross_section_area = math.pi * r**2 # Cross sectional area of jet in cm^2
+# Using formula from Reynolds (1986)
 jet_vel = 200 * (1e5)                   # Jet velocity in cm/s
 
-ionized_Mdot = n_e * m_H * cross_section_area * jet_vel
-print("Ionized Mass Loss Rate (g/s): ", ionized_Mdot)
-print("Ionized Mass Loss Rate (Msun/yr): ", (ionized_Mdot/M_sun) * (365*24*60*60))
-"""
+ionized_Mdot = 6.33e-19 * op_angle**0.75 * jet_vel * K_1**0.75 * D**1.5 * freq_m**(-0.26) * T_e**(-0.075) * (np.sin(i))**(-0.25)
+print("Ionized Mass Loss Rate (M_sun/yr): ", ionized_Mdot)
+
 ############## 4. Plot all the spectra in graphs ############################### 
 #############################################################################
 
@@ -168,6 +162,8 @@ new_y_minor_tick_labels=np.concatenate((np.arange(0.1,1.0,0.1), np.arange(1.0, 1
 new_y_tick_locations=np.log10(new_y_tick_labels)
 new_y_minor_tick_locations=np.log10(new_y_minor_tick_labels)
 
+# Make y labels strings to not have decimal points
+new_y_tick_labels=np.array(['0.1', '0.5', '1', '10', '50', '100', '500'])
 
 ############## 8. Plot the spectrum with all fits  ##################
 #####################################################################
@@ -193,7 +189,7 @@ plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', lab
 # Plot spectral fit
 alpha_high, K_1, K_3 = popt
 # Make array of frequencies to plot spectral fit
-freq_samples = np.arange(1.0, 400.0, 0.1)
+freq_samples = np.arange(1.0, 1000.0, 0.1)
 
 # Plot combined spectral fit over all frequencies
 spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
@@ -223,6 +219,6 @@ plt.ylabel(r'$\mathit{S_{\nu}}\ (mJy$)')
 plt.legend(loc='upper left')
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('spectrum_L1551_IRS_5_S_ff_spec_fit_fixed_T_with_1998_data.png')
+plt.savefig('spectrum_L1551_IRS_5_S_power_law_fit_fixed_T_with_1998_data.eps')
 
 plt.show()

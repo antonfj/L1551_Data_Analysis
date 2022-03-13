@@ -41,10 +41,10 @@ tag = '_outflow1'
 #---------------------
 pos_c = np.array([0*u.au, 0*u.au, 0])
 axis = np.array([-2,1,-1.154]) 
-z_min = 8*u.au
+z_min = 10*u.au
 z_max = 100*u.au
 
-op_angle = 0.349        # Opening angle of jet in radians
+op_angle = 0.489        # Opening angle of jet in radians
 
 #---------------------
 #PHYSICAL PROPERTIES
@@ -64,9 +64,9 @@ ionfrac = [1.0,0.0]
 abund = [1e-4, 0]
 gtd = 100
 
-v0 = 500 * 1e3 #km/s
+v0 = 200 * 1e3 #km/s
 
-mass_loss_rate=1e-8     # Mass loss rate of star in M_sun yr^-1
+mass_loss_rate=8e-9     # Mass loss rate of star in M_sun yr^-1
 
 #dens0 = 2e12
 dens0 = (8.04e22/(w0**2 * 1.67e-27 * v0)) * mass_loss_rate # Calculate initial density from mass loss rate
@@ -108,7 +108,7 @@ t0 = time.time()
 #********
 sizex = 200 * u.au
 sizey = sizez = 200 * u.au
-Nx = Ny = Nz = 500
+Nx = Ny = Nz = 800
 GRID = Model.grid([sizex, sizey, sizez], [Nx, Ny, Nz], rt_code='radmc3d')
 
 #********
@@ -154,28 +154,26 @@ Pm.scatter3D(GRID, density, weight, colordim = temperature, NRand = 4000, axisun
 #####################################################################
 # Calculate radiative transfer and simulate image with RADMC-3D
 #####################################################################
-num_threads = "8"      # Set num. of threads for RADMC-3D to use
+num_threads = "24"      # Set num. of threads for RADMC-3D to use
 
 # Image at C Band (5 GHz)
 frequency = 5e9         # Frequency to simulate image
 sizeau = "200"          # Size in au of area to image
 npix = "200"             # Size of image in pixels
-radmc3d_command = ["radmc3d", "image", "lambda", "136364", "setthreads", num_threads, "sizeau", sizeau, "npix", npix]
-subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True)
-#image.makeImage(wav=136364.,sizeau=sizeau,npix=npix)
-
-#K_Band_image = readImage("image.out")
-#K_Band_image = K_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.104,0.081],pa=-23.26)
-#plotImage(K_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
 
 # Image at C Band (5 GHz)
-radmc3d_command = ["radmc3d", "image", "lambda", "60000", "setthreads", num_threads, "sizeau", sizeau, "npix", npix]
+radmc3d_command = ["radmc3d", "image", "lambda", "60000", "setthreads", num_threads, "sizeau", sizeau, "npix", npix, "stokes"]
 subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True)
 #makeImage(wav=60000.,sizeau=sizeau,npix=npix)
 
 C_Band_image = readImage("image.out")
 C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.220,0.113],pa=43.831)
 plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
+
+#Create fits file of image at coordinates of L1551 IRS 5
+C_Band_image.writeFits(fname="L1551_IRS_5_C_Band_5_GHz_simulated.fits", dpc=140,coord="04h31m34.17s+18d08m04.28s",
+                       bandwidthmhz=500.0, casa=False,stokes="I")
+
 """
 # Same image convolved to X Band beam
 C_Band_image = readImage("image.out")

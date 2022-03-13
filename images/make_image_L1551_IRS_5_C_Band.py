@@ -19,13 +19,6 @@ fig.show_colorscale(vmin=-2e-4, vmax=1.3e-2, cmap='jet')
 fig.add_colorbar()
 fig.colorbar.set_axis_label_text(r'Flux (Jy/beam)')
 
-"""
-# Add labels for bow shock, counter-jet and star
-fig.add_label(0.25, 0.6, 'Counter-Jet', relative=True, color='black')
-fig.add_label(0.65, 0.1, 'Bow Shock', relative=True, color='black')
-fig.add_label(0.58, 0.6, 'DG Tau A', relative=True, color='black')
-"""
-
 # Overplot C Band contours
 sigma=11e-6
 fig.show_contour(c_band_image, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,

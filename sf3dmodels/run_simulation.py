@@ -40,9 +40,9 @@ tag = '_outflow1'
 #GEOMETRIC PARAMETERS
 #---------------------
 pos_c = np.array([0*u.au, 0*u.au, 0])
-axis = np.array([-2,1,-1.154]) 
-z_min = 10*u.au
-z_max = 100*u.au
+axis = np.array([-1,0.7,-1.22]) 
+z_min = 12*u.au
+z_max = 240*u.au
 
 op_angle = 0.489        # Opening angle of jet in radians
 
@@ -66,7 +66,7 @@ gtd = 100
 
 v0 = 200 * 1e3 #km/s
 
-mass_loss_rate=8e-9     # Mass loss rate of star in M_sun yr^-1
+mass_loss_rate=0.4e-8     # Mass loss rate of star in M_sun yr^-1
 
 #dens0 = 2e12
 dens0 = (8.04e22/(w0**2 * 1.67e-27 * v0)) * mass_loss_rate # Calculate initial density from mass loss rate
@@ -106,9 +106,9 @@ t0 = time.time()
 #********
 #GRIDDING
 #********
-sizex = 200 * u.au
-sizey = sizez = 200 * u.au
-Nx = Ny = Nz = 800
+sizex = 400 * u.au
+sizey = sizez = 400 * u.au
+Nx = Ny = Nz = 1600
 GRID = Model.grid([sizex, sizey, sizez], [Nx, Ny, Nz], rt_code='radmc3d')
 
 #********
@@ -154,6 +154,9 @@ Pm.scatter3D(GRID, density, weight, colordim = temperature, NRand = 4000, axisun
 #####################################################################
 # Calculate radiative transfer and simulate image with RADMC-3D
 #####################################################################
+
+t0 = time.time()
+
 num_threads = "24"      # Set num. of threads for RADMC-3D to use
 
 # Image at C Band (5 GHz)
@@ -166,12 +169,19 @@ radmc3d_command = ["radmc3d", "image", "lambda", "60000", "setthreads", num_thre
 subprocess.run(radmc3d_command, shell=False, check=True, universal_newlines=True)
 #makeImage(wav=60000.,sizeau=sizeau,npix=npix)
 
+#********
+#TIMING
+#********
+print ('-------------------------------------------------\n')
+print ('Ellapsed time: %.3fs' % (time.time() - t0))
+print ('-------------------------------------------------\n-------------------------------------------------\n')
+
 C_Band_image = readImage("image.out")
 C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.220,0.113],pa=43.831)
-plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
+#plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
 
 #Create fits file of image at coordinates of L1551 IRS 5
-C_Band_image.writeFits(fname="L1551_IRS_5_C_Band_5_GHz_simulated.fits", dpc=140,coord="04h31m34.17s+18d08m04.28s",
+C_Band_image.writeFits(fname="L1551_IRS_5_C_Band_5_GHz_simulated_inc_angle_45.fits", dpc=140,coord="04h31m34.17s+18d08m04.28s",
                        bandwidthmhz=500.0, casa=False,stokes="I")
 
 """

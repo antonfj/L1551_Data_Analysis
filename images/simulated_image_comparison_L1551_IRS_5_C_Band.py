@@ -60,7 +60,7 @@ beamcolor='white'
 ###################################################
 ############### Observed image #################### 
 ###################################################
-fig1 = aplpy.FITSFigure(observed_image_mJy, figure=fig, subplot=[0.18, 0.53, 0.7, 0.45])
+fig1 = aplpy.FITSFigure(observed_image_mJy, figure=fig, subplot=[0.1, 0.54, 0.85, 0.42])
 fig1.recenter(67.8923708,18.1345203, width=0.2e-3, height=0.2e-3)
 
 fig1.show_colorscale(stretch='linear')
@@ -91,7 +91,7 @@ fig1.ticks.set_color(tickcolor)
 ###################################################
 ############### Simulated image ################### 
 ###################################################
-fig2 = aplpy.FITSFigure(simulated_image_mJy, figure=fig, subplot=[0.18, 0.03, 0.7, 0.45])
+fig2 = aplpy.FITSFigure(simulated_image_mJy, figure=fig, subplot=[0.1, 0.04, 0.85, 0.42])
 fig2.recenter(67.8923708,18.1345203, width=0.2e-3, height=0.2e-3)
 fig2.show_colorscale(stretch='linear')
 fig2.show_colorscale(vmin=-2e-2, vmax=3.2e-1, cmap=cmap)

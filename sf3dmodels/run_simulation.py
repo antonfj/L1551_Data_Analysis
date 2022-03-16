@@ -108,7 +108,7 @@ t0 = time.time()
 #********
 sizex = 400 * u.au
 sizey = sizez = 400 * u.au
-Nx = Ny = Nz = 1600
+Nx = Ny = Nz = 800
 GRID = Model.grid([sizex, sizey, sizez], [Nx, Ny, Nz], rt_code='radmc3d')
 
 #********
@@ -181,7 +181,7 @@ C_Band_image = C_Band_image.imConv(dpc=140.,psfType='gauss',fwhm=[0.220,0.113],p
 #plotImage(C_Band_image,log=False,cmap=cm.hot,bunit='jy/beam',dpc=140,au=False,arcsec=True)
 
 #Create fits file of image at coordinates of L1551 IRS 5
-C_Band_image.writeFits(fname="L1551_IRS_5_C_Band_5_GHz_simulated_inc_angle_45.fits", dpc=140,coord="04h31m34.17s+18d08m04.28s",
+C_Band_image.writeFits(fname="L1551_IRS_5_C_Band_5_GHz_simulated.fits", dpc=140,coord="04h31m34.17s+18d08m04.28s",
                        bandwidthmhz=500.0, casa=False,stokes="I")
 
 """

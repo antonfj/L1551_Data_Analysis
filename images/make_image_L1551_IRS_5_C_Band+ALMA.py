@@ -11,10 +11,10 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Images to use in the final image
 alma_image = 'L1551_IRS_5_ALMA_Band_4_shifted_to_VLA_epoch.fits'
 alma_image_mJy = 'L1551_IRS_5_ALMA_Band_4_shifted_to_VLA_epoch.mJy.fits'
-ku_band_image = 'L1551_IRS_5_Ku_Band_VLA_r_0_5_sc1.cropped.fits'
-ku_band_image_mJy = 'L1551_IRS_5_Ku_Band_VLA_r_0_5_sc1.cropped.mJy.fits'
+c_band_image = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.fits'
+c_band_image_mJy = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.mJy.fits'
 
-final_image = 'L1551_IRS_5_ALMA+Ku_Band_VLA.eps'
+final_image = 'L1551_IRS_5_ALMA+C_Band_VLA+E-Merlin.pdf'
 
 # Convert images from Jy to mJy
 def convert_to_mJy(image, image_mJy):
@@ -33,7 +33,7 @@ def convert_to_mJy(image, image_mJy):
         hdulist.flush()
 
 convert_to_mJy(alma_image,alma_image_mJy)
-convert_to_mJy(ku_band_image,ku_band_image_mJy)
+convert_to_mJy(c_band_image,c_band_image_mJy)
 
 titlefontsize=12
 labelfontsize=8
@@ -53,11 +53,11 @@ fig.show_colorscale(vmin=-0.2, vmax=13, cmap='jet')
 fig.add_colorbar()
 fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
-# Overplot Ku Band contours
-sigma=4.3e-3
-fig.show_contour(ku_band_image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
-	6*sigma, 7*sigma, 8*sigma, 9*sigma, 10*sigma, 20*sigma, 40*sigma, 60*sigma,
-	80*sigma, 100*sigma, 120*sigma, 140*sigma, 160*sigma, 180*sigma], colors='white', linewidths=0.5, overlap=True)
+# Overplot C Band contours
+sigma=11e-3
+fig.show_contour(c_band_image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
+	6*sigma, 7*sigma, 8*sigma, 9*sigma, 10*sigma, 15*sigma, 20*sigma, 25*sigma],
+	linewidths=0.5, colors='white', overlap=True)
 
 # Coordinates of sources
 north_coord = np.array([67.8923542,18.1346203])
@@ -67,7 +67,7 @@ south_coord = np.array([67.8923708,18.1345203])
 jet_axis_north = 67.0 * (np.pi/180.0)
 jet_axis_south = 55.0 * (np.pi/180.0)
 
-# Plot line along jet axis
+# Plot line along jet axes of both sources
 ra_length = 2.0 / (60*60)	# Set length of line along ra axis
 dec_length_north = ra_length / np.tan(jet_axis_north)
 dec_length_south = ra_length / np.tan(jet_axis_south)
@@ -84,10 +84,10 @@ fig.show_markers([north_coord[0], south_coord[0]], [north_coord[1], south_coord[
 
 # Adds synthesis beam in bottom left corner
 fig.add_beam()
-# Set to axes and PA of beam of 15 GHz image
-fig.beam.set_major(4.44e-5)    # 0.16 arcsecs
-fig.beam.set_minor(3.33e-5)    # 0.12 arcsecs
-fig.beam.set_angle(-60)
+# Set to axes and PA of beam of 5 GHz image
+fig.beam.set_major(6.11e-5)    # 0.22 arcsecs
+fig.beam.set_minor(3.06e-5)    # 0.11 arcsecs
+fig.beam.set_angle(-44)
 fig.beam.set_color(beamcolor)
 fig.beam.set_pad(1.0)
 

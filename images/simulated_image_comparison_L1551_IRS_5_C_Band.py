@@ -14,7 +14,7 @@ simulated_image_mJy = 'L1551_IRS_5_C_Band_5_GHz_simulated.mJy.fits'
 observed_image = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.fits'
 observed_image_mJy = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.mJy.fits'
 
-final_image = 'L1551_IRS_5_C_Band_simulated_image_comparison.eps'
+final_image = 'L1551_IRS_5_C_Band_simulated_image_comparison.pdf'
 
 # Convert images to mJy
 # Check if mJy files exist

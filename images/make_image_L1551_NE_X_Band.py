@@ -9,10 +9,10 @@ matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
 
 # Images to use in the final image
-image = 'L1551_IRS5_X_Band_VLA_initial_r_+0.5.fits'
-image_mJy = 'L1551_IRS5_X_Band_VLA_initial_r_+0.5.mJy.fits'
+image = 'L1551_NE_X_Band_VLA_cropped_r_+0.5.pbcor.fits'
+image_mJy = 'L1551_NE_X_Band_VLA_cropped_r_+0.5.pbcor.mJy.fits'
 
-final_image = 'L1551_IRS_5_X_Band.pdf'
+final_image = 'L1551_NE_X_Band.pdf'
 
 # Convert images from Jy to mJy
 def convert_to_mJy(image, image_mJy):
@@ -41,43 +41,43 @@ labelcolor='white'
 beamcolor='white'
 
 fig = aplpy.FITSFigure(image_mJy,figsize=[6.,5.])
-fig.recenter(67.8923625, 18.1345753, width=0.7e-3, height=0.7e-3)
+fig.recenter(67.9354, 18.14205, width=0.7e-3, height=0.7e-3)
 
 fig.show_colorscale(stretch='linear')
-fig.show_colorscale(vmin=-3e-2, vmax=7e-1, cmap='jet')
+fig.show_colorscale(vmin=-9e-2, vmax=3e-1, cmap='jet')
 
 # Add colourbar to image
 fig.add_colorbar()
 fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Overplot C Band contours
-sigma=10e-3
+sigma=26e-3
 fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
-	6*sigma,10*sigma, 20*sigma, 30*sigma, 40*sigma, 50*sigma, 60*sigma],
+	6*sigma, 7*sigma, 8*sigma, 9*sigma, 10*sigma],
 	linewidths=0.5, colors='white', overlap=True)
 
 # Coordinates of sources
-north_coord = np.array([67.8923542,18.1346203])
-south_coord = np.array([67.8923708,18.1345203])
+# Took peak of Ku Band emission as position of source
+A_coord = np.array([67.93547224,18.14202352])
+B_coord = np.array([67.93533817,18.14209124])
 
 # Jet axis of sources
-jet_axis_north = 67.0 * (np.pi/180.0)
-jet_axis_south = 55.0 * (np.pi/180.0)
+jet_axis_A = 228.0 * (np.pi/180.0)
+jet_axis_B = 238.0 * (np.pi/180.0)
 
-# Plot line along jet axes of both sources
+# Plot line along jet axis
 ra_length = 2.0 / (60*60)	# Set length of line along ra axis
-dec_length_north = ra_length / np.tan(jet_axis_north)
-dec_length_south = ra_length / np.tan(jet_axis_south)
+dec_length_A = ra_length / np.tan(jet_axis_A)
+dec_length_B = ra_length / np.tan(jet_axis_B)
 
-jet_coords = np.array([[ [north_coord[0] - ra_length/2, north_coord[0] + ra_length/2],
-	[north_coord[1] - dec_length_north/2, north_coord[1] + dec_length_north/2] ],
-	[ [south_coord[0] - ra_length/2, south_coord[0] + ra_length/2],
-	[south_coord[1] - dec_length_south/2, south_coord[1] + dec_length_south/2] ] ])
-fig.show_lines(jet_coords, color=['white', 'white'], linestyle=['dashed', 'dashed'], linewidths=1)
+jet_coords = np.array([[ [A_coord[0] - ra_length/2, A_coord[0] + ra_length/2],
+	[A_coord[1] - dec_length_A/2, A_coord[1] + dec_length_A/2] ],
+	[ [B_coord[0] - ra_length/2, B_coord[0] + ra_length/2],
+	[B_coord[1] - dec_length_B/2, B_coord[1] + dec_length_B/2] ] ])
+fig.show_lines(jet_coords, color=['white', 'white'], linestyle=['dashed', 'dashed'])
 
-# Plot marker at position of both sources
-fig.show_markers([north_coord[0], south_coord[0]], [north_coord[1], south_coord[1]], marker='+', 
-                 facecolor='black', edgecolor='black', zorder=10)
+# Plot marker at positions of both sources
+fig.show_markers([A_coord[0], B_coord[0]], [A_coord[1], B_coord[1]], marker='+', facecolor='black', edgecolor='black', zorder=10)
 
 # Adds synthesis beam in bottom left corner
 fig.add_beam()

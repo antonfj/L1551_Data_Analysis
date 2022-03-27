@@ -91,6 +91,12 @@ fig.beam.set_angle(-56)
 fig.beam.set_color('white')
 fig.beam.set_pad(1.0)
 
+# Add scale bar
+length = 20     # length in au
+angular_length = (length / (206265 * 147)) * (360/(2*np.pi))
+print(angular_length)
+fig.add_scalebar(angular_length, label='20 AU', corner='bottom right', color=beamcolor)
+
 # Set font size of labels
 fig.axis_labels.set_font(size=labelfontsize)
 fig.tick_labels.set_font(size=labelfontsize)

@@ -9,8 +9,8 @@ matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
 
 # Images to use in the final image
-image = 'L1551_IRS_5_ALMA_Band_3_cropped.cont.I.manual.image.pbcor.fits'
-image_mJy = 'L1551_IRS_5_ALMA_Band_3_cropped.cont.I.manual.image.pbcor.mJy.fits'
+image = 'L1551_IRS_5_ALMA_Band_3_cropped_shifted_to_VLA_pos.image.pbcor.fits'
+image_mJy = 'L1551_IRS_5_ALMA_Band_3_cropped_shifted_to_VLA_pos.image.pbcor.mJy.fits'
 
 final_image = 'L1551_IRS_5_ALMA_Band_3.pdf'
 
@@ -52,8 +52,7 @@ fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Overplot C Band contours
 sigma=50e-3
-fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
-	6*sigma,10*sigma,50*sigma,
+fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 6*sigma, 9*sigma, 50*sigma,
     100*sigma, 150*sigma, 200*sigma, 250*sigma, 300*sigma],
 	linewidths=0.5, colors='white', overlap=True)
 

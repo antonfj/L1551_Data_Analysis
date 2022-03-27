@@ -9,8 +9,8 @@ matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
 
 # Images to use in the final image
-image = 'L1551_IRS_5_ALMA_Band_7.cont.I.pbcor.fits'
-image_mJy = 'L1551_IRS_5_ALMA_Band_7.cont.I.pbcor.mJy.fits'
+image = 'L1551_IRS_5_ALMA_Band_7_shifted_to_VLA_pos.cont.I.pbcor.fits'
+image_mJy = 'L1551_IRS_5_ALMA_Band_7_shifted_to_VLA_pos.cont.I.pbcor.mJy.fits'
 
 final_image = 'L1551_IRS_5_ALMA_Band_7.pdf'
 

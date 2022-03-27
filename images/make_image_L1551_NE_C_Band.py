@@ -9,10 +9,10 @@ matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
 
 # Images to use in the final image
-image = 'L1551_NE_X_Band_VLA_cropped_r_+0.5.pbcor.fits'
-image_mJy = 'L1551_NE_X_Band_VLA_cropped_r_+0.5.pbcor.mJy.fits'
+image = 'L1551_NE_C_Band_VLA_initial_r_+0.5.pbcor.cropped.fits'
+image_mJy = 'L1551_NE_C_Band_VLA_initial_r_+0.5.pbcor.cropped.mJy.fits'
 
-final_image = 'L1551_NE_X_Band.pdf'
+final_image = 'L1551_NE_C_Band.pdf'
 
 # Convert images from Jy to mJy
 def convert_to_mJy(image, image_mJy):
@@ -44,16 +44,16 @@ fig = aplpy.FITSFigure(image_mJy,figsize=[6.,5.])
 fig.recenter(67.9354, 18.14205, width=0.7e-3, height=0.7e-3)
 
 fig.show_colorscale(stretch='linear')
-fig.show_colorscale(vmin=-8e-2, vmax=3e-1, cmap='jet')
+fig.show_colorscale(vmin=-5e-2, vmax=1.6e-1, cmap='jet')
 
 # Add colourbar to image
 fig.add_colorbar()
 fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Overplot C Band contours
-sigma=26e-3
+sigma=16e-3
 fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 5*sigma,
-	6*sigma, 7*sigma, 8*sigma, 9*sigma, 10*sigma],
+	6*sigma, 7*sigma, 8*sigma, 9*sigma],
 	linewidths=0.5, colors='white', overlap=True)
 
 # Coordinates of sources

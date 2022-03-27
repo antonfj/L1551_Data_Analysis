@@ -52,8 +52,8 @@ fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Overplot C Band contours
 sigma=0.75
-fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 4*sigma, 6*sigma,
-    8*sigma,10*sigma, 12*sigma, 25*sigma, 50*sigma, 75*sigma,
+fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 6*sigma,
+    9*sigma, 12*sigma, 25*sigma, 50*sigma, 75*sigma,
     100*sigma,125*sigma, 150*sigma],
 	linewidths=0.5, colors='white', overlap=True)
 

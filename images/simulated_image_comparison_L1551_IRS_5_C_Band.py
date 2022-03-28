@@ -57,6 +57,10 @@ tickcolor='white'
 labelcolor='white'
 beamcolor='white'
 
+# Coordinates of sources
+north_coord = np.array([67.8923542,18.1346203])
+south_coord = np.array([67.8923708,18.1345203])
+
 ###################################################
 ############### Observed image #################### 
 ###################################################
@@ -78,6 +82,10 @@ fig1.set_title('Observation', size=titlefontsize)
 #fig1.add_beam()
 #fig1.beam.set_color(beamcolor)
 #fig1.beam.set_pad(1.0)
+
+# Plot marker at position of both sources
+fig1.show_markers([north_coord[0], south_coord[0]], [north_coord[1], south_coord[1]], marker='+', 
+                 facecolor='black', edgecolor='black', zorder=10)
 
 # Set font size of labels
 fig1.axis_labels.set_font(size=labelfontsize)
@@ -108,6 +116,10 @@ fig2.set_title('Model', size=titlefontsize)
 #fig2.add_beam()
 #fig2.beam.set_color(beamcolor)
 #fig2.beam.set_pad(1.0)
+
+# Plot marker at position of both sources
+fig2.show_markers([north_coord[0], south_coord[0]], [north_coord[1], south_coord[1]], marker='+', 
+                 facecolor='black', edgecolor='black', zorder=10)
 
 # Set font size of labels
 fig2.axis_labels.set_font(size=labelfontsize)

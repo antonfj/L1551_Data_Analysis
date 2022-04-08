@@ -156,7 +156,7 @@ new_x_tick_locations=np.log10(new_x_tick_labels*(1.0))
 new_x_minor_tick_locations=np.log10(new_x_minor_tick_labels*(1.0))
 
 # Make major tick labels in log-log graph corresponding to flux densities listed in following array
-new_y_tick_labels=np.array([0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000])
+new_y_tick_labels=np.array([0.01, 0.1, 1, 10, 100, 1000])
 # Minor tick labels every 10 uJy from 10 - 100 uJy and every 100 uJy from 100 - 1500 uJy
 new_y_minor_tick_labels=np.concatenate((np.arange(0.01,0.1,0.01),np.arange(0.1,1.0,0.1), np.arange(1.0, 10.0, 1.0), np.arange(10.0, 100.0, 10.0), np.arange(100.0, 1000.0, 100.0)))
 # Get log of flux densities for tick labels so they can be applied to get corresponding tick locations in the log-log graph
@@ -164,7 +164,7 @@ new_y_tick_locations=np.log10(new_y_tick_labels)
 new_y_minor_tick_locations=np.log10(new_y_minor_tick_labels)
 
 # Make y labels strings to not have decimal points
-new_y_tick_labels=np.array(['0.01', '0.05', '0.1', '0.5', '1', '5', '10', '50', '100', '500', '1000'])
+new_y_tick_labels=np.array(['0.01', '0.1',  '1', '10', '100', '1000'])
 
 ############## 8. Plot the spectrum with all fits  ##################
 #####################################################################
@@ -175,17 +175,19 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Makes all text non-italic
 matplotlib.rcParams.update({'mathtext.default': 'regular'})
 # Sets font size of all text on graph
-matplotlib.rcParams.update({'font.size': 12})
-plt.rc('legend', fontsize=12)
+matplotlib.rcParams.update({'font.size': 8})
+plt.rc('legend', fontsize=8)
+
+markersize= 5        # set marker size
 
 # Plot data values
-fig = plt.figure(5, figsize=(7, 4))
+fig = plt.figure(5, figsize=(3.7, 2.5))
 ax = fig.add_subplot(111)
-plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020')
+plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020', markersize=markersize)
 # Plot 2003 data
-#plt.errorbar(log_freq_2003, log_flux_2003, yerr=log_flux_err_2003, fmt='gs', label='2003')
+plt.errorbar(log_freq_2003, log_flux_2003, yerr=log_flux_err_2003, fmt='gs', label='2003', markersize=markersize)
 # Plot 1998 data
-plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', label='1998')
+plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', label='1998', markersize=markersize)
 
 # Plot spectral fit
 alpha_high, K_1, K_3 = popt
@@ -217,9 +219,9 @@ plt.xlabel(r'$\mathit{\nu}$ (GHz)')
 plt.ylabel(r'$\mathit{S_{\nu}}\ (mJy$)')
 
 # Add legend to plot
-plt.legend(loc='upper left')
+plt.legend(loc='upper left', borderaxespad=0.7)
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('spectrum_L1551_IRS_5_N_power_law_fit_fixed_T_with_1998_data.eps')
+plt.savefig('spectrum_L1551_IRS_5_N_power_law_fit_fixed_T_with_1998_data.pdf')
 
 plt.show()

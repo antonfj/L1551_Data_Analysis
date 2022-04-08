@@ -164,16 +164,18 @@ matplotlib.rcParams['ytick.direction'] = 'in'
 # Makes all text non-italic
 matplotlib.rcParams.update({'mathtext.default': 'regular'})
 # Sets font size of all text on graph
-matplotlib.rcParams.update({'font.size': 12})
-plt.rc('legend', fontsize=12)
+matplotlib.rcParams.update({'font.size': 8})
+plt.rc('legend', fontsize=8)
+
+markersize= 5        # set marker size
 
 # Plot data values
-fig = plt.figure(5, figsize=(7, 4))
+fig = plt.figure(5, figsize=(3.7, 2.5))
 ax = fig.add_subplot(111)
-plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020')
+plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020', markersize=markersize)
 
 # Plot 2000 data
-plt.errorbar(log_freq_2000, log_flux_2000, yerr=log_flux_err_2000, fmt='r^', label='2000')
+plt.errorbar(log_freq_2000, log_flux_2000, yerr=log_flux_err_2000, fmt='r^', label='2000', markersize=markersize)
 
 # Plot spectral fit
 alpha_high, K_1, K_3 = popt
@@ -205,9 +207,9 @@ plt.xlabel(r'$\mathit{\nu}$ (GHz)')
 plt.ylabel(r'$\mathit{S_{\nu}}\ (mJy$)')
 
 # Add legend to plot
-plt.legend(loc='upper left')
+plt.legend(loc='upper left', borderaxespad=0.7)
 
 plt.tight_layout()				# Make everything fit in window
-plt.savefig('spectrum_L1551_NE_B_power_law_fit_fixed_T_with_1998_data.eps')
+plt.savefig('spectrum_L1551_NE_B_power_law_fit_fixed_T_with_1998_data.pdf')
 
 plt.show()

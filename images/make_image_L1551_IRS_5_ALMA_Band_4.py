@@ -50,7 +50,7 @@ fig.show_colorscale(vmin=-250e-3, vmax=13, cmap='jet')
 fig.add_colorbar()
 fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
-# Overplot C Band contours
+# Overplot contours
 sigma=76e-3
 fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma,
 	25*sigma, 50*sigma, 75*sigma, 100*sigma,125*sigma, 150*sigma],

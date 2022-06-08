@@ -14,7 +14,7 @@ alma_image_mJy = 'L1551_IRS_5_ALMA_Band_4_shifted_to_VLA_epoch.mJy.fits'
 c_band_image = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.fits'
 c_band_image_mJy = 'L1551_IRS_5_C_Band_E-MERLIN_VLA_combined_r_0.5_uv_cut_shifted_to_VLA_pos.mJy.fits'
 
-final_image = 'L1551_IRS_5_ALMA+C_Band_VLA+E-Merlin.pdf'
+final_image = 'L1551_IRS_5_C_Band.pdf'
 
 # Convert images from Jy to mJy
 def convert_to_mJy(image, image_mJy):
@@ -43,11 +43,11 @@ tickcolor='white'
 labelcolor='white'
 beamcolor='white'
 
-fig = aplpy.FITSFigure(alma_image_mJy,figsize=[6.,5.])
+fig = aplpy.FITSFigure(c_band_image_mJy,figsize=[6.,5.])
 fig.recenter(67.8923625, 18.1345753, width=0.7e-3, height=0.7e-3)
 
 fig.show_colorscale(stretch='linear')
-fig.show_colorscale(vmin=-0.2, vmax=12.5, cmap='jet')
+fig.show_colorscale(vmin=-0.03, vmax=0.3, cmap='jet')
 
 # Add colourbar to image
 fig.add_colorbar()

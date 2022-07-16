@@ -47,10 +47,10 @@ if not os.path.isfile(observed_image_mJy):
     hdulist.flush()
 
 
-fig = matplotlib.pyplot.figure(figsize=[6.,8.])
+fig = matplotlib.pyplot.figure(figsize=[3.5,5.])
 
-titlefontsize=12
-labelfontsize=8
+titlefontsize=8
+labelfontsize=6
 cmap='jet'
 framecolor='black'
 tickcolor='white'
@@ -64,7 +64,7 @@ south_coord = np.array([67.8923708,18.1345203])
 ###################################################
 ############### Observed image #################### 
 ###################################################
-fig1 = aplpy.FITSFigure(observed_image_mJy, figure=fig, subplot=[0.1, 0.54, 0.85, 0.42])
+fig1 = aplpy.FITSFigure(observed_image_mJy, figure=fig, subplot=[0.13, 0.56, 0.85, 0.4])
 fig1.recenter(67.8923708,18.1345203, width=0.2e-3, height=0.2e-3)
 
 fig1.show_colorscale(stretch='linear')
@@ -72,6 +72,8 @@ fig1.show_colorscale(vmin=-2e-2, vmax=3.2e-1, cmap=cmap)
 
 # Add colourbar to image
 fig1.add_colorbar()
+fig1.colorbar.set_font(size=labelfontsize)
+fig1.colorbar.set_axis_label_font(size=labelfontsize)
 fig1.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Set title
@@ -99,13 +101,15 @@ fig1.ticks.set_color(tickcolor)
 ###################################################
 ############### Simulated image ################### 
 ###################################################
-fig2 = aplpy.FITSFigure(simulated_image_mJy, figure=fig, subplot=[0.1, 0.04, 0.85, 0.42])
+fig2 = aplpy.FITSFigure(simulated_image_mJy, figure=fig, subplot=[0.13, 0.06, 0.85, 0.4])
 fig2.recenter(67.8923708,18.1345203, width=0.2e-3, height=0.2e-3)
 fig2.show_colorscale(stretch='linear')
 fig2.show_colorscale(vmin=-2e-2, vmax=3.2e-1, cmap=cmap)
 
 # Add colourbar to image
 fig2.add_colorbar()
+fig2.colorbar.set_font(size=labelfontsize)
+fig2.colorbar.set_axis_label_font(size=labelfontsize)
 fig2.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Set title

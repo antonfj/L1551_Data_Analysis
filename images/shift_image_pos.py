@@ -1,14 +1,14 @@
 from astropy.io import fits
 
-image_file='L1551_IRS_5_ALMA_Band_6.fits'
-output_file='L1551_IRS_5_ALMA_Band_6_shifted.fits'
+image_file='L1551_IRS5_C_Band_E-MERLIN_initial_deep_clean_r_+0.5.fits'
+output_file='L1551_IRS5_C_Band_E-MERLIN_initial_deep_clean_r_+0.5_shifted_to_VLA_pos.fits'
 
 image_data, image_header = fits.getdata(image_file, header=True)
 #print(image_header)
 
 # RA and Dec shifts in milliarcsec
-ra_shift = -60.9
-dec_shift = 63.7
+ra_shift = -37.1
+dec_shift = 87.8
 
 # Convert to degrees
 ra_shift = ra_shift/(1000*60*60)

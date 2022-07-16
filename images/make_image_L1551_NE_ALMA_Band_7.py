@@ -33,14 +33,14 @@ def convert_to_mJy(image, image_mJy):
 convert_to_mJy(image,image_mJy)
 
 titlefontsize=12
-labelfontsize=10
+labelfontsize=8
 cmap='jet'
 framecolor='white'
 tickcolor='white'
-labelcolor='white'
+labelcolor='red'
 beamcolor='white'
 
-fig = aplpy.FITSFigure(image_mJy,figsize=[6.,5.])
+fig = aplpy.FITSFigure(image_mJy,figsize=[5.,3])
 fig.recenter(67.9354, 18.14205, width=0.7e-3, height=0.7e-3)
 
 fig.show_colorscale(stretch='linear')
@@ -52,8 +52,8 @@ fig.colorbar.set_axis_label_text(r'Flux (mJy/beam)')
 
 # Overplot C Band contours
 sigma=1.1
-fig.show_contour(image_mJy, levels=[-3*sigma, 3*sigma, 5*sigma,
-    10*sigma, 15*sigma, 20*sigma, 25*sigma, 50*sigma, 75*sigma,
+fig.show_contour(image_mJy, levels=[-3*sigma,
+    25*sigma, 50*sigma, 75*sigma,
     100*sigma,125*sigma, 150*sigma, 175*sigma],
 	linewidths=0.5, colors='white', overlap=True)
 
@@ -94,11 +94,19 @@ fig.add_scalebar(angular_length, label='20 AU', corner='bottom right', color=bea
 # Set font size of labels
 fig.axis_labels.set_font(size=labelfontsize)
 fig.tick_labels.set_font(size=labelfontsize)
+fig.colorbar.set_axis_label_font(size=labelfontsize)
+fig.colorbar.set_font(size=labelfontsize)
+fig.scalebar.set_font_size(size=labelfontsize)
 
 #Set frame colour to black
 fig.frame.set_color(framecolor)
 #Set tick colour to black
 fig.ticks.set_color(tickcolor)
+
+# Add title and labels for components
+fig.add_label(0.33, 0.28, 'A', relative=True, color=labelcolor, size=labelfontsize)
+fig.add_label(0.67, 0.71, 'B', relative=True, color=labelcolor, size=labelfontsize)
+fig.add_label(0.5, 0.92, 'Band 7 (336 GHz)', relative=True, color=labelcolor, size=labelfontsize)
 
 fig.save(final_image, dpi=500)
 

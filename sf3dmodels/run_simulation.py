@@ -53,7 +53,7 @@ op_angle = 0.489         # Opening angle of jet in radians
 #PHYSICAL PROPERTIES
 #---------------------
 #w0 = 1*u.au
-w0 = z_min * np.tan(op_angle/2)
+w0 = z0 * np.tan(op_angle/2)
 print("w0 (au): ", w0/u.au)
 eps = 0.66
 w = [w0, eps]

@@ -82,8 +82,8 @@ new_y_tick_labels=np.array(['0.01', '0.1',  '1', '10', '100', '1000'])
 ######################################################################################
 
 # Flux values
-flux = np.array([0.11, 0.51, 0.90, 1.19, 1.27, 1.63, 34.07, 85.10, 271., 497.])
-flux_err = np.array([0.00, 0.10, 0.03, 0.03, 0.05, 0.04, 0.76, 1.70, 17., 35.])
+flux = np.array([0.11, 0.47, 0.88, 1.15, 1.23, 1.60, 32.2, 78.6, 240., 418.])
+flux_err = np.array([0.02, 0.03, 0.05, 0.06, 0.07, 0.09, 1.66, 4., 12.8, 22.])
 
 # Flux values from Rodriguez et al. (1998)
 flux_1998 = np.array([0.70, 0.78, 1.2, 2.0, 7.4, 45.0])
@@ -109,9 +109,7 @@ log_flux_err_1998 = (flux_err_1998) / (flux_1998 * np.log(10))
 log_flux_2003 = np.log10(flux_2003)
 log_flux_err_2003 = (flux_err_2003) / (flux_2003 * np.log(10))
 
-# Frequencies that flux was measured at (X data)
-#freq = np.array([5.0, 10.0, 13.5, 17.5, 20.0, 24.0, 43.0, 93.0, 153.0, 225.0, 336.0])
-#freq = np.array([5.0, 10.0, 13.5, 17.5, 20.0, 24.0, 41.0, 45.0, 93.0, 153.0, 225.0, 336.0])
+# Frequencies that flux was measured at
 freq = np.array([5.0, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
 
 # Frequencies of 1998 data
@@ -173,7 +171,7 @@ plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', lab
 # Plot spectral fit
 alpha_high, K_1, K_3 = popt
 # Make array of frequencies to plot spectral fit
-freq_samples = np.arange(1.0, 1000.0, 0.1)
+freq_samples = np.arange(1.0, 500.0, 0.1)
 
 # Plot combined spectral fit over all frequencies
 spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
@@ -184,9 +182,6 @@ plt.plot(np.log10(freq_samples), 0.25*np.log10(freq_samples) + np.log10(K_1), co
 
 # Plot high freq. spectral fit
 plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')
-
-# Set axes for the log-log graph by getting log of upper and lower limits for axes
-plt.axis(np.log10([1.0, 500.0, 0.01, 1000.0]))
 
 # Apply major and minor ticks for x and y axes
 ax1.set_xticks(new_x_tick_locations)
@@ -210,8 +205,8 @@ plt.tight_layout()				# Make everything fit in window
 ############################### S source #############################################
 ######################################################################################
 # Flux values
-flux = np.array([1.13, 1.66, 1.89, 1.92, 2.11, 2.03, 20.02, 48.14, 154., 291.])
-flux_err = np.array([0.10, 0.07, 0.04, 0.03, 0.06, 0.05, 0.47, 0.82, 15., 27.])
+flux = np.array([1.16, 1.75, 1.97, 2.05, 2.12, 2.10, 18.4, 42.8, 125., 210.])
+flux_err = np.array([0.07, 0.10, 0.10, 0.11, 0.12, 0.12, 1.0, 2.2, 7., 12.])
 
 # Flux values from Rodriguez et al. (1998)
 flux_1998 = np.array([0.60, 0.70, 0.9, 1.5, 4.8, 23.0])
@@ -233,7 +228,7 @@ log_flux_err_1998 = (flux_err_1998) / (flux_1998 * np.log(10))
 log_flux_2003 = np.log10(flux_2003)
 log_flux_err_2003 = (flux_err_2003) / (flux_2003 * np.log(10))
 
-# Frequencies that flux was measured at (X data)
+# Frequencies that flux was measured at
 freq = np.array([5.1, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
 
 # Frequencies of 1998 data
@@ -295,7 +290,7 @@ plt.errorbar(log_freq_1998, log_flux_1998, yerr=log_flux_err_1998, fmt='r^', lab
 # Plot spectral fit
 alpha_high, K_1, K_3 = popt
 # Make array of frequencies to plot spectral fit
-freq_samples = np.arange(1.0, 1000.0, 0.1)
+freq_samples = np.arange(1.0, 500.0, 0.1)
 
 # Plot combined spectral fit over all frequencies
 spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
@@ -306,6 +301,9 @@ plt.plot(np.log10(freq_samples), 0.25*np.log10(freq_samples) + np.log10(K_1), co
 
 # Plot high freq. spectral fit
 plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')
+
+# Set axes for the log-log graph by getting log of upper and lower limits for axes
+plt.axis(np.log10([1.0, 500.0, 0.01, 1000.0]))
 
 # Make y axis labels invisible
 ax2.tick_params(axis='y', labelleft=False)

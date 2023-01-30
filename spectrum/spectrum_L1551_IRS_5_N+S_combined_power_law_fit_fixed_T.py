@@ -24,6 +24,8 @@ D = 140.                            # Distance to source in pc
 Omega_s = (math.pi*theta_maj*theta_min)/(4*math.log(2)) 	# Solid angle size of emission
 print("Omega_s: ", Omega_s)
 
+alpha_low = 0.6                     # Spec. ind. of free-free emission
+
 # Function for finding reduced chi-squared values
 def reduced_chisquared(observed, expected, errors, no_parameters):
 	dof = len(observed) - no_parameters
@@ -38,7 +40,7 @@ def reduced_chisquared(observed, expected, errors, no_parameters):
 	
 # Combined power law spectrum
 def combined_power_law_fit(freq, alpha_high, K_1, K_3):
-        log_flux = np.log10(K_1*freq**0.25 + K_3*freq**alpha_high)
+        log_flux = np.log10(K_1*freq**alpha_low + K_3*freq**alpha_high)
         return log_flux
 
 #####################################################################################
@@ -178,7 +180,7 @@ spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
 plt.plot(np.log10(freq_samples), spectral_fit, 'k--', label='Combined')
 
 # Plot low freq. spectral fit
-plt.plot(np.log10(freq_samples), 0.25*np.log10(freq_samples) + np.log10(K_1), color='green', label='Free-Free')
+plt.plot(np.log10(freq_samples), alpha_low*np.log10(freq_samples) + np.log10(K_1), color='green', label='Free-Free')
 
 # Plot high freq. spectral fit
 plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')
@@ -297,7 +299,7 @@ spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
 plt.plot(np.log10(freq_samples), spectral_fit, 'k--', label='Combined')
 
 # Plot low freq. spectral fit
-plt.plot(np.log10(freq_samples), 0.25*np.log10(freq_samples) + np.log10(K_1), color='green', label='Free-Free')
+plt.plot(np.log10(freq_samples), alpha_low*np.log10(freq_samples) + np.log10(K_1), color='green', label='Free-Free')
 
 # Plot high freq. spectral fit
 plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')

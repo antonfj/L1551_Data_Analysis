@@ -29,8 +29,6 @@ D = 140.                            # Distance to source in pc
 Omega_s = (math.pi*theta_maj*theta_min)/(4*math.log(2)) 	# Solid angle size of emission
 print("Omega_s: ", Omega_s)
 
-alpha_low = 0.6                     # Spec. ind. of free-free emission
-
 # Function for finding reduced chi-squared values
 def reduced_chisquared(observed, expected, errors, no_parameters):
 	dof = len(observed) - no_parameters
@@ -44,7 +42,7 @@ def reduced_chisquared(observed, expected, errors, no_parameters):
 	return red_chi_squared
 	
 # Combined power law spectrum
-def combined_power_law_fit(freq, alpha_high, K_1, K_3):
+def combined_power_law_fit(freq, alpha_low, alpha_high, K_1, K_3):
         log_flux = np.log10(K_1*freq**alpha_low + K_3*freq**alpha_high)
         return log_flux
 
@@ -74,22 +72,22 @@ new_x_tick_locations=np.log10(new_x_tick_labels*(1.0))
 new_x_minor_tick_locations=np.log10(new_x_minor_tick_labels*(1.0))
 
 # Make major tick labels in log-log graph corresponding to flux densities listed in following array
-new_y_tick_labels=np.array([0.01, 0.1, 0.5, 1, 10, 50, 100, 500])
+new_y_tick_labels=np.array([0.1, 0.5, 1, 10, 50, 100, 500])
 # Minor tick labels every 10 uJy from 10 - 100 uJy and every 100 uJy from 100 - 1500 uJy
-new_y_minor_tick_labels=np.concatenate((np.arange(0.01,0.1,0.01),np.arange(0.1,1.0,0.1), np.arange(1.0, 10.0, 1.0), np.arange(10.0, 100.0, 10.0), np.arange(100.0, 500.0, 100.0)))
+new_y_minor_tick_labels=np.concatenate((np.arange(0.1,1.0,0.1), np.arange(1.0, 10.0, 1.0), np.arange(10.0, 100.0, 10.0), np.arange(100.0, 500.0, 100.0)))
 # Get log of flux densities for tick labels so they can be applied to get corresponding tick locations in the log-log graph
 new_y_tick_locations=np.log10(new_y_tick_labels)
 new_y_minor_tick_locations=np.log10(new_y_minor_tick_labels)
 
 # Make y labels strings to not have decimal points
-new_y_tick_labels=np.array(['0.01', '0.1', '0.5', '1', '10', '50', '100', '500'])
+new_y_tick_labels=np.array(['0.1', '0.5', '1', '10', '50', '100', '500'])
 
 ######################################################################################
 ############################### A source #############################################
 ######################################################################################
 # Flux values
-flux = np.array([0.18, 0.31, 0.58, 0.81, 1.11, 1.36, 330.0])
-flux_err = np.array([0.03, 0.04, 0.04, 0.05, 0.07, 0.08, 20.0])
+flux = np.array([0.32, 0.36, 0.60, 0.83, 1.16, 1.42, 372.0])
+flux_err = np.array([0.06, 0.06, 0.02, 0.02, 0.03, 0.04, 15.0])
 
 # Flux values from Reipurth et al. (2002)
 flux_2000 = np.array([0.39])
@@ -122,15 +120,15 @@ log_freq_2000 = np.log10(freq_2000)
 
 ############## 2. Find spectral index in each part of spectrum #################
 ################################################################################
-init_guess = [2.0, 1, 0.01]
+init_guess = [0.5, 2.0, 1, 0.01]
 popt, pcov = scipy.optimize.curve_fit(combined_power_law_fit, freq, log_flux, init_guess)
 perr = np.sqrt(np.diag(pcov))
 perr = np.sqrt(np.diag(pcov))
 
-#alpha_low = popt[0]
-alpha_high = popt[0]
-K_1 = popt[1]
-K_3 = popt[2]
+alpha_low = popt[0]
+alpha_high = popt[1]
+K_1 = popt[2]
+K_3 = popt[3]
 """
 # Give reduced chi-squared value (WARNING!!!: Reduced Chi-Square is not very accurate for non-linear fits)
 log_expected_flux = combined_power_law_fit(freq, alpha_high, K_2, K_3)
@@ -140,14 +138,36 @@ red_chi_squared = reduced_chisquared(log_flux, log_expected_flux, log_flux_err, 
 print("Red. Chi-Squared: ", red_chi_squared)
 """
 # Redefine fit parameters with errors
-#alpha_low = ufloat(popt[0],perr[0])
-alpha_high = ufloat(popt[0], perr[0])
-K_1 = ufloat(popt[1], perr[1])
-K_3 = ufloat(popt[2], perr[2])
+alpha_low = ufloat(popt[0],perr[0])
+alpha_high = ufloat(popt[1], perr[1])
+K_1 = ufloat(popt[2], perr[2])
+K_3 = ufloat(popt[3], perr[3])
 
 print("K_1: ", K_1)
-#print("Low frequency spec. ind.: ", alpha_low)
+print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
+
+############## 4. Plot all the spectra in graphs ############################### 
+#############################################################################
+
+# Make major tick labels in log-log graph corresponding to frequencies listed in following array
+new_x_tick_labels=np.array([1, 5, 10, 50, 100, 500])
+# Minor tick labels every 1 GHz from 1 - 10 GHz, every 10 GHz from 10 - 100 GHz, and every 100 GHz from 100 - 500 GHz
+new_x_minor_tick_labels = np.concatenate((np.arange(1.0, 10.0, 1.0), np.arange(10.0, 100.0, 10.0), np.arange(100.0, 500.0, 100.0)))
+# Get log of frequencies for tick labels so they can be applied to get corresponding tick locations in the log-log graph
+new_x_tick_locations=np.log10(new_x_tick_labels*(1.0))
+new_x_minor_tick_locations=np.log10(new_x_minor_tick_labels*(1.0))
+
+# Make major tick labels in log-log graph corresponding to flux densities listed in following array
+new_y_tick_labels=np.array([0.1, 0.5, 1, 10, 50, 100, 500])
+# Minor tick labels every 10 uJy from 10 - 100 uJy and every 100 uJy from 100 - 1500 uJy
+new_y_minor_tick_labels=np.concatenate((np.arange(0.1,1.0,0.1), np.arange(1.0, 10.0, 1.0), np.arange(10.0, 100.0, 10.0), np.arange(100.0, 500.0, 100.0)))
+# Get log of flux densities for tick labels so they can be applied to get corresponding tick locations in the log-log graph
+new_y_tick_locations=np.log10(new_y_tick_labels)
+new_y_minor_tick_locations=np.log10(new_y_minor_tick_labels)
+
+# Make y labels strings to not have decimal points
+new_y_tick_labels=np.array(['0.1', '0.5', '1', '10', '50', '100', '500'])
 
 ############## Plot the spectrum with fit ###########################
 #####################################################################
@@ -155,18 +175,18 @@ print("High frequency spec. ind.: ", alpha_high)
 # Plot data values
 fig = plt.figure(1, figsize=(7.2, 3.2))
 ax1 = fig.add_subplot(121)
-plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020', markersize=markersize)
+plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2019 - 2021', markersize=markersize)
 
 # Plot 2000 data
 plt.errorbar(log_freq_2000, log_flux_2000, yerr=log_flux_err_2000, fmt='r^', label='2000', markersize=markersize)
 
 # Plot spectral fit
-alpha_high, K_1, K_3 = popt
+alpha_low, alpha_high, K_1, K_3 = popt
 # Make array of frequencies to plot spectral fit
 freq_samples = np.arange(1.0, 1000.0, 0.1)
 
 # Plot combined spectral fit over all frequencies
-spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
+spectral_fit = combined_power_law_fit(freq_samples, alpha_low, alpha_high, K_1, K_3)
 plt.plot(np.log10(freq_samples), spectral_fit, 'k--', label='Combined')
 
 # Plot low freq. spectral fit
@@ -176,7 +196,7 @@ plt.plot(np.log10(freq_samples), alpha_low*np.log10(freq_samples) + np.log10(K_1
 plt.plot(np.log10(freq_samples), alpha_high*np.log10(freq_samples) + np.log10(K_3), color='darkorange', label='Dust')
 
 # Set axes for the log-log graph by getting log of upper and lower limits for axes
-plt.axis(np.log10([1.0, 500.0, 0.01, 500.0]))
+plt.axis(np.log10([1.0, 500.0, 1.0, 500.0]))
 
 # Apply major and minor ticks for x and y axes
 ax1.set_xticks(new_x_tick_locations)
@@ -199,8 +219,8 @@ plt.tight_layout()				# Make everything fit in window
 ############################### B source #############################################
 ######################################################################################
 # Flux values
-flux = np.array([0.16, 0.15, 0.27, 0.33, 0.43, 0.51, 130.0])
-flux_err = np.array([0.02, 0.03, 0.02, 0.02, 0.03, 0.04, 8.0])
+flux = np.array([0.15, 0.17, 0.32, 0.40, 0.52, 0.61, 207.0])
+flux_err = np.array([0.03, 0.05, 0.02, 0.02, 0.03, 0.04, 22.0])
 
 # Flux values from Reipurth et al. (2002)
 flux_2000 = np.array([0.27])
@@ -232,15 +252,15 @@ log_freq_2000 = np.log10(freq_2000)
 
 ############## 2. Find spectral index in each part of spectrum #################
 ################################################################################
-init_guess = [2.0, 1, 0.01]
+init_guess = [0.5, 2.0, 1, 0.01]
 popt, pcov = scipy.optimize.curve_fit(combined_power_law_fit, freq, log_flux, init_guess)
 perr = np.sqrt(np.diag(pcov))
 perr = np.sqrt(np.diag(pcov))
 
-#alpha_low = popt[0]
-alpha_high = popt[0]
-K_1 = popt[1]
-K_3 = popt[2]
+alpha_low = popt[0]
+alpha_high = popt[1]
+K_1 = popt[2]
+K_3 = popt[3]
 """
 # Give reduced chi-squared value (WARNING!!!: Reduced Chi-Square is not very accurate for non-linear fits)
 log_expected_flux = combined_power_law_fit(freq, alpha_high, K_2, K_3)
@@ -250,13 +270,13 @@ red_chi_squared = reduced_chisquared(log_flux, log_expected_flux, log_flux_err, 
 print("Red. Chi-Squared: ", red_chi_squared)
 """
 # Redefine fit parameters with errors
-#alpha_low = ufloat(popt[0],perr[0])
-alpha_high = ufloat(popt[0], perr[0])
-K_1 = ufloat(popt[1], perr[1])
-K_3 = ufloat(popt[2], perr[2])
+alpha_low = ufloat(popt[0],perr[0])
+alpha_high = ufloat(popt[1], perr[1])
+K_1 = ufloat(popt[2], perr[2])
+K_3 = ufloat(popt[3], perr[3])
 
 print("K_1: ", K_1)
-#print("Low frequency spec. ind.: ", alpha_low)
+print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
 
 ############## Plot the spectrum with fit ###########################
@@ -265,18 +285,18 @@ print("High frequency spec. ind.: ", alpha_high)
 # Plot data values
 # Share axes with previous subplot
 ax2 = fig.add_subplot(122, sharex=ax1, sharey=ax1)
-plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2020', markersize=markersize)
+plt.errorbar(log_freq, log_flux, yerr=log_flux_err, fmt='bo', label='2019 - 2021', markersize=markersize)
 
 # Plot 2000 data
 plt.errorbar(log_freq_2000, log_flux_2000, yerr=log_flux_err_2000, fmt='r^', label='2000', markersize=markersize)
 
 # Plot spectral fit
-alpha_high, K_1, K_3 = popt
+alpha_low, alpha_high, K_1, K_3 = popt
 # Make array of frequencies to plot spectral fit
 freq_samples = np.arange(1.0, 1000.0, 0.1)
 
 # Plot combined spectral fit over all frequencies
-spectral_fit = combined_power_law_fit(freq_samples, alpha_high, K_1, K_3)
+spectral_fit = combined_power_law_fit(freq_samples, alpha_low, alpha_high, K_1, K_3)
 plt.plot(np.log10(freq_samples), spectral_fit, 'k--', label='Combined')
 
 # Plot low freq. spectral fit

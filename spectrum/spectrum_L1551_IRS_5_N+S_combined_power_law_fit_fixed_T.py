@@ -11,8 +11,9 @@ from uncertainties.umath import *  # Imports sin(), etc.
 T_e = 1e4                               # Fixed value of electron temperature
 r_0 = 8                            # Radius of base of jet in au
 w_0 = 1.4                             # Width at base of jet in au
+
 i = 45. * (2*math.pi) / (360)  # Inclination angle of jet in radians
-print("Inclination angle (radians): ", i)
+#print("Inclination angle (radians): ", i)
 
 #theta_maj = ufloat(0.396, 0.023)	# Major axis of source in arcsec
 #theta_min = ufloat(0.057, 0.022) 	# Minor axis of source in arcsec
@@ -22,7 +23,7 @@ theta_min = 0.195                       # Minor axis of source in arcsec
 D = 140.                            # Distance to source in pc
 
 Omega_s = (math.pi*theta_maj*theta_min)/(4*math.log(2)) 	# Solid angle size of emission
-print("Omega_s: ", Omega_s)
+#print("Omega_s: ", Omega_s)
 
 alpha_low = 0.6                     # Spec. ind. of free-free emission
 
@@ -82,6 +83,7 @@ new_y_tick_labels=np.array(['0.01', '0.1',  '1', '10', '100', '1000'])
 ######################################################################################
 ############################### N source #############################################
 ######################################################################################
+print("L1551 IRS 5 N:")
 
 # Flux values
 flux = np.array([0.11, 0.47, 0.88, 1.15, 1.23, 1.60, 32.2, 78.6, 240., 418.])
@@ -97,11 +99,11 @@ flux_err_2003 = np.array([0.02])
 
 # Add in quadrature 10% absolute flux calibration error
 flux_err = np.sqrt(flux_err**2 + (0.1*flux)**2)
-print("Errors: ", flux_err)
+#print("Errors: ", flux_err)
 flux_err_1998 = np.sqrt(flux_err_1998**2 + (0.1*flux_1998)**2)
-print("Errors (1998): ", flux_err_1998)
+#print("Errors (1998): ", flux_err_1998)
 flux_err_2003 = np.sqrt(flux_err_2003**2 + (0.1*flux_2003)**2)
-print("Errors (1998): ", flux_err_2003)
+#print("Errors (1998): ", flux_err_2003)
 
 # Logs of flux densities and errors for the log-log graph
 log_flux = np.log10(flux)
@@ -117,12 +119,12 @@ freq = np.array([5.0, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
 # Frequencies of 1998 data
 wavelengths_1998 = np.array([180.0, 36.0, 20.0, 13.0, 7.0, 2.7])
 freq_1998 = 3e8/(wavelengths_1998*1e6)
-print("Frequencies (1998): ", freq_1998)
+#print("Frequencies (1998): ", freq_1998)
 
 # Frequencies of 2003 data
 wavelengths_2003 = np.array([35.0])
 freq_2003 = 3e8/(wavelengths_2003*1e6)
-print("Frequencies (2003): ", freq_2003)
+#print("Frequencies (2003): ", freq_2003)
 
 # Log of frequencies for the log-log graph
 log_freq = np.log10(freq)
@@ -158,6 +160,13 @@ print("K_1: ", K_1)
 #print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
 
+# Ionized Mass Loss Rate
+# Using formula from Reynolds (1986)
+jet_vel = 200 * (1e5)                   # Jet velocity in cm/s
+op_angle = 43 * (2*math.pi) / (360)        # Opening angle of jet in radians
+
+ionized_Mdot = 1.23e-18 * K_1**0.75 * op_angle**0.75 * jet_vel * D**1.5 * T_e**(-0.075) * (np.sin(i))**(-0.25)
+print("Ionized Mass Loss Rate (M_sun/yr): ", ionized_Mdot)
 ############## 8. Plot the spectrum with fit ########################
 #####################################################################
 
@@ -206,6 +215,9 @@ plt.tight_layout()				# Make everything fit in window
 ######################################################################################
 ############################### S source #############################################
 ######################################################################################
+print('\n')
+print("L1551 IRS 5 S:")
+
 # Flux values
 flux = np.array([1.16, 1.75, 1.97, 2.05, 2.12, 2.10, 18.4, 42.8, 125., 210.])
 flux_err = np.array([0.07, 0.10, 0.10, 0.11, 0.12, 0.12, 1.0, 2.2, 7., 12.])
@@ -236,12 +248,12 @@ freq = np.array([5.1, 10.0, 13.5, 17.5, 20.0, 24.0, 93.0, 153.0, 225.0, 336.0])
 # Frequencies of 1998 data
 wavelengths_1998 = np.array([180.0, 36.0, 20.0, 13.0, 7.0, 2.7])
 freq_1998 = 3e8/(wavelengths_1998*1e6)
-print("Frequencies (1998): ", freq_1998)
+#print("Frequencies (1998): ", freq_1998)
 
 # Frequencies of 2003 data
 wavelengths_2003 = np.array([35.0])
 freq_2003 = 3e8/(wavelengths_2003*1e6)
-print("Frequencies (2003): ", freq_2003)
+#print("Frequencies (2003): ", freq_2003)
 
 # Log of frequencies for the log-log graph
 log_freq = np.log10(freq)
@@ -276,6 +288,14 @@ K_3 = ufloat(popt[2], perr[2])
 print("K_1: ", K_1)
 #print("Low frequency spec. ind.: ", alpha_low)
 print("High frequency spec. ind.: ", alpha_high)
+
+# Ionized Mass Loss Rate
+# Using formula from Reynolds (1986)
+jet_vel = 200 * (1e5)                   # Jet velocity in cm/s
+op_angle = 28 * (2*math.pi) / (360)        # Opening angle of jet in radians
+
+ionized_Mdot = 1.23e-18 * K_1**0.75 * op_angle**0.75 * jet_vel * D**1.5 * T_e**(-0.075) * (np.sin(i))**(-0.25)
+print("Ionized Mass Loss Rate (M_sun/yr): ", ionized_Mdot)
 
 ############## Plot the spectrum with fit ###########################
 #####################################################################
